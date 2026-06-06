@@ -24,7 +24,7 @@ class DropdownFieldWidget extends BaseFieldWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         DropdownButtonFormField<dynamic>(
-          value: value,
+          initialValue: value,
           isExpanded: true,
           decoration: InputDecoration(
             labelText: schema.label,

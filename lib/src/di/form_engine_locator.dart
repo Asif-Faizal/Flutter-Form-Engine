@@ -53,25 +53,6 @@ abstract final class FormEngineLocator {
   }
 
   static void _registerBuiltIns(WidgetRegistry registry) {
-    FieldWidgetBuilder textBuilder({
-      required schema,
-      required value,
-      required error,
-      required enabled,
-      required onChanged,
-      required onFocusLost,
-      required resolvedOptions,
-    }) =>
-        TextFieldWidget(
-          schema: schema,
-          value: value,
-          error: error,
-          enabled: enabled,
-          onChanged: onChanged,
-          onFocusLost: onFocusLost,
-          resolvedOptions: resolvedOptions,
-        );
-
     for (final type in [
       FieldType.text,
       FieldType.email,
@@ -79,7 +60,27 @@ abstract final class FormEngineLocator {
       FieldType.phone,
       FieldType.password,
     ]) {
-      registry.register(type, textBuilder);
+      registry.register(
+        type,
+        ({
+          required schema,
+          required value,
+          required error,
+          required enabled,
+          required onChanged,
+          required onFocusLost,
+          required resolvedOptions,
+        }) =>
+            TextFieldWidget(
+              schema: schema,
+              value: value,
+              error: error,
+              enabled: enabled,
+              onChanged: onChanged,
+              onFocusLost: onFocusLost,
+              resolvedOptions: resolvedOptions,
+            ),
+      );
     }
 
     registry.register(

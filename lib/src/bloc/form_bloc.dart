@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../conditional/conditional_engine.dart';
+import '../models/field_option.dart';
 import '../models/form_schema.dart';
 import '../validation/field_validator.dart';
 import 'form_event.dart';
@@ -166,8 +167,9 @@ class FormEngineBloc extends Bloc<FormEngineEvent, FormEngineState> {
     FormDynamicOptionsLoaded event,
     Emitter<FormEngineState> emit,
   ) {
-    final dynamicOptions = Map<String, List>.from(state.dynamicOptions)
-      ..[event.key] = event.options;
+    final dynamicOptions =
+        Map<String, List<FieldOption>>.from(state.dynamicOptions)
+          ..[event.key] = event.options;
     final loadingOptions = Map<String, bool>.from(state.loadingOptions)
       ..[event.key] = false;
 
