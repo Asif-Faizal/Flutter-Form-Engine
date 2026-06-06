@@ -1,15 +1,17 @@
 # flutter_form_engine
 
-A new Flutter plugin project.
+A JSON-driven dynamic form builder for Flutter.
+Supports text fields, dropdowns, validation, and conditional field logic.
+Built with BLoC + Get_it.
 
-## Getting Started
+## Getting started
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/to/develop-plugins),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+```yaml
+dependencies:
+  flutter_form_engine:
+    path: ../   # or pub.dev version once published
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Usage
 
+See the `example/` directory for a full working demo.
