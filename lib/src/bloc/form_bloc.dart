@@ -40,7 +40,11 @@ class FormEngineBloc extends Bloc<FormEngineEvent, FormEngineState> {
       initialValues,
     );
     final enabled = _conditionalEngine.computeEnabled(schema, initialValues);
-    final errors = _validateAll(schema, initialValues);
+    final errors = _validateAll(
+      schema,
+      initialValues,
+      visibilityMap: visibility,
+    );
 
     emit(
       state.copyWith(
@@ -76,7 +80,11 @@ class FormEngineBloc extends Bloc<FormEngineEvent, FormEngineState> {
 
     final visibility = _conditionalEngine.computeVisibility(schema, newValues);
     final enabled = _conditionalEngine.computeEnabled(schema, newValues);
-    final errors = _validateAll(schema, newValues);
+    final errors = _validateAll(
+      schema,
+      newValues,
+      visibilityMap: visibility,
+    );
 
     emit(
       state.copyWith(
@@ -104,22 +112,30 @@ class FormEngineBloc extends Bloc<FormEngineEvent, FormEngineState> {
     final schema = state.schema;
     if (schema == null) return;
 
+    final visibility =
+        _conditionalEngine.computeVisibility(schema, state.values);
     final allVisibleKeys = schema.fields
-        .where((f) => state.visibilityMap[f.key] != false)
+        .where((f) => visibility[f.key] != false)
         .map((f) => f.key)
         .toSet();
 
-    final errors = _validateAll(schema, state.values);
+    final errors = _validateAll(
+      schema,
+      state.values,
+      visibilityMap: visibility,
+    );
     emit(
       state.copyWith(
         touched: allVisibleKeys,
         errors: errors,
+        visibilityMap: visibility,
         submitStatus: FormSubmitStatus.validating,
       ),
     );
 
-    final hasErrors =
-        errors.values.where((e) => e != null).isNotEmpty;
+    final hasErrors = errors.entries.any(
+      (e) => visibility[e.key] != false && e.value != null,
+    );
 
     if (hasErrors) {
       emit(state.copyWith(submitStatus: FormSubmitStatus.idle));
@@ -128,7 +144,7 @@ class FormEngineBloc extends Bloc<FormEngineEvent, FormEngineState> {
 
     final payload = Map<String, dynamic>.fromEntries(
       state.values.entries.where(
-        (e) => state.visibilityMap[e.key] != false,
+        (e) => visibility[e.key] != false,
       ),
     );
 
@@ -153,7 +169,11 @@ class FormEngineBloc extends Bloc<FormEngineEvent, FormEngineState> {
     emit(
       state.copyWith(
         values: initialValues,
-        errors: _validateAll(schema, initialValues),
+        errors: _validateAll(
+          schema,
+          initialValues,
+          visibilityMap: visibility,
+        ),
         touched: {},
         visibilityMap: visibility,
         enabledMap: enabled,
@@ -190,11 +210,14 @@ class FormEngineBloc extends Bloc<FormEngineEvent, FormEngineState> {
 
   Map<String, String?> _validateAll(
     FormSchema schema,
-    Map<String, dynamic> values,
-  ) {
+    Map<String, dynamic> values, {
+    required Map<String, bool> visibilityMap,
+  }) {
     return {
       for (final f in schema.fields)
-        f.key: _validator.validate(f, values[f.key], values),
+        f.key: visibilityMap[f.key] == false
+            ? null
+            : _validator.validate(f, values[f.key], values),
     };
   }
 }

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_engine/flutter_form_engine.dart';
 
 import 'screens/home_screen.dart';
+import 'theme/app_theme.dart';
 
 void main() {
-  FormEngineLocator.setup();
+  FormEngineLocator.setup(theme: AppTheme.formEngineTheme);
   runApp(const ExampleApp());
 }
 
@@ -16,10 +17,7 @@ class ExampleApp extends StatelessWidget {
     return MaterialApp(
       title: 'Form Engine Example',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorSchemeSeed: Colors.indigo,
-        useMaterial3: true,
-      ),
+      theme: AppTheme.materialTheme,
       home: const HomeScreen(),
     );
   }

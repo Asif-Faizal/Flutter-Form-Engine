@@ -7,6 +7,7 @@ import '../registry/widget_registry.dart';
 import '../validation/built_in_validator.dart';
 import '../validation/field_validator.dart';
 import '../validation/validation_rule_registry.dart';
+import '../theme/form_engine_theme.dart';
 import '../widgets/fields/dropdown_field_widget.dart';
 import '../widgets/fields/text_field_widget.dart';
 
@@ -15,7 +16,7 @@ import '../widgets/fields/text_field_widget.dart';
 ///
 /// ```dart
 /// void main() {
-///   FormEngineLocator.setup();
+///   FormEngineLocator.setup(theme: myFormEngineTheme);
 ///   runApp(const MyApp());
 /// }
 /// ```
@@ -23,6 +24,7 @@ abstract final class FormEngineLocator {
   static final _locator = GetIt.instance;
 
   static void setup({
+    FormEngineTheme? theme,
     FieldValidator? customValidator,
     ValidationRuleRegistry? validationRules,
     ConditionEvaluatorRegistry? conditionEvaluators,
@@ -30,6 +32,10 @@ abstract final class FormEngineLocator {
     bool reset = false,
   }) {
     if (reset) _locator.reset();
+
+    _locator.registerSingleton<FormEngineTheme>(
+      theme ?? FormEngineTheme.carbon(),
+    );
 
     final ruleRegistry = validationRules ?? ValidationRuleRegistry.withBuiltIns();
     final evaluatorRegistry =
@@ -118,4 +124,6 @@ abstract final class FormEngineLocator {
 
   static ConditionEvaluatorRegistry get conditionEvaluators =>
       _locator<ConditionEvaluatorRegistry>();
+
+  static FormEngineTheme get theme => _locator<FormEngineTheme>();
 }

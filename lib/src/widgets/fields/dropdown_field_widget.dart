@@ -26,17 +26,21 @@ class DropdownFieldWidget extends BaseFieldWidget {
         DropdownButtonFormField<dynamic>(
           initialValue: value,
           isExpanded: true,
+          style: Theme.of(context).textTheme.bodyMedium,
           decoration: InputDecoration(
             labelText: schema.label,
             hintText: schema.hint,
             errorText: error,
-          ),
+          ).applyDefaults(Theme.of(context).inputDecorationTheme),
           onTap: () {},
           items: options
               .map(
                 (o) => DropdownMenuItem<dynamic>(
                   value: o.value,
-                  child: Text(o.label),
+                  child: Text(
+                    o.label,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 ),
               )
               .toList(),

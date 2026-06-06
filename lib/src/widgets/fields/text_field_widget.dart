@@ -27,12 +27,13 @@ class TextFieldWidget extends BaseFieldWidget {
         obscureText: schema.type == FieldType.password,
         keyboardType: schema.keyboardType,
         maxLength: schema.maxLength,
+        style: Theme.of(context).textTheme.bodyMedium,
         decoration: InputDecoration(
           labelText: schema.label,
           hintText: schema.hint,
           errorText: error,
           counterText: schema.maxLength != null ? null : '',
-        ),
+        ).applyDefaults(Theme.of(context).inputDecorationTheme),
         onChanged: onChanged,
       ),
     );

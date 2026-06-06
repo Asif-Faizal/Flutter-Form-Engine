@@ -5,6 +5,7 @@ import '../bloc/form_bloc.dart';
 import '../bloc/form_event.dart';
 import '../bloc/form_state.dart';
 import '../di/form_engine_locator.dart';
+import '../theme/form_engine_theme_applicator.dart';
 import '../models/field_option.dart';
 import '../models/field_schema.dart';
 import '../models/form_schema.dart';
@@ -40,9 +41,12 @@ class FormEngineWidget extends StatelessWidget {
         conditionalEngine: FormEngineLocator.conditionalEngine,
         onSubmit: onSubmit,
       )..add(FormSchemaLoaded(schema)),
-      child: _FormEngineBody(
-        padding: padding,
-        showResetButton: showResetButton,
+      child: Theme(
+        data: FormEngineThemeApplicator.apply(FormEngineLocator.theme),
+        child: _FormEngineBody(
+          padding: padding,
+          showResetButton: showResetButton,
+        ),
       ),
     );
   }
@@ -63,7 +67,11 @@ class _FormEngineBody extends StatelessWidget {
       builder: (context, state) {
         final schema = state.schema;
         if (schema == null) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: CircularProgressIndicator(
+              color: FormEngineLocator.theme.primaryColor,
+            ),
+          );
         }
 
         final registry = FormEngineLocator.widgetRegistry;
@@ -104,12 +112,18 @@ class _FormEngineBody extends StatelessWidget {
               ],
               if (state.submitStatus == FormSubmitStatus.success) ...[
                 const SizedBox(height: 12),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.check_circle, color: Colors.green),
-                    SizedBox(width: 8),
-                    Text('Submitted successfully'),
+                    Icon(
+                      Icons.check_circle,
+                      color: FormEngineLocator.theme.successColor,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Submitted successfully',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ],
                 ),
               ],
