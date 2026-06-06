@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../conditional/conditional_engine.dart';
 import '../models/field_option.dart';
 import '../models/form_schema.dart';
+import '../options/dependent_options_resolver.dart';
 import '../validation/field_validator.dart';
 import 'form_event.dart';
 import 'form_state.dart';
@@ -11,9 +12,12 @@ class FormEngineBloc extends Bloc<FormEngineEvent, FormEngineState> {
   FormEngineBloc({
     required FieldValidator validator,
     required ConditionalEngine conditionalEngine,
+    DependentOptionsResolver? dependentOptionsResolver,
     this.onSubmit,
   })  : _validator = validator,
         _conditionalEngine = conditionalEngine,
+        _dependentOptionsResolver =
+            dependentOptionsResolver ?? const DependentOptionsResolver(),
         super(const FormEngineState()) {
     on<FormSchemaLoaded>(_onSchemaLoaded);
     on<FormFieldChanged>(_onFieldChanged);
@@ -25,6 +29,7 @@ class FormEngineBloc extends Bloc<FormEngineEvent, FormEngineState> {
 
   final FieldValidator _validator;
   final ConditionalEngine _conditionalEngine;
+  final DependentOptionsResolver _dependentOptionsResolver;
 
   /// Called with the cleaned, visible-only values after successful validation.
   final void Function(Map<String, dynamic> values)? onSubmit;
@@ -66,8 +71,14 @@ class FormEngineBloc extends Bloc<FormEngineEvent, FormEngineState> {
     if (schema == null) return;
 
     final oldValues = Map<String, dynamic>.from(state.values);
-    final newValues = Map<String, dynamic>.from(state.values)
+    var newValues = Map<String, dynamic>.from(state.values)
       ..[event.key] = event.value;
+
+    newValues = _dependentOptionsResolver.clearStaleDependentValues(
+      schema,
+      newValues,
+      event.key,
+    );
 
     final toClear = _conditionalEngine.fieldsToClear(
       schema,

@@ -26,6 +26,9 @@ export 'src/validation/validation_rule_registry.dart';
 export 'src/conditional/conditional_engine.dart';
 export 'src/conditional/condition_evaluator_registry.dart';
 
+// Options
+export 'src/options/dependent_options_resolver.dart';
+
 // Theme
 export 'src/theme/form_engine_theme.dart';
 export 'src/theme/form_engine_theme_applicator.dart';

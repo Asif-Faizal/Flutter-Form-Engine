@@ -33,6 +33,7 @@ void main() {
         'key': 'category',
         'type': 'dropdown',
         'label': 'Category',
+        'optionsSourceKey': 'country',
         'dependsOn': {
           'field': 'country',
           'condition': 'notEmpty',
@@ -43,7 +44,8 @@ void main() {
           {'rule': 'required', 'message': 'Select a category'},
         ],
         'options': [
-          {'label': 'Technology', 'value': 'tech'},
+          {'label': 'IT Services', 'value': 'it', 'when': 'IN'},
+          {'label': 'Software', 'value': 'sw', 'when': 'US'},
         ],
       },
       {
@@ -77,7 +79,7 @@ void main() {
       bloc
         ..add(const FormFieldChanged(key: 'full_name', value: 'Jane Doe'))
         ..add(const FormFieldChanged(key: 'country', value: 'IN'))
-        ..add(const FormFieldChanged(key: 'category', value: 'tech'))
+        ..add(const FormFieldChanged(key: 'category', value: 'it'))
         ..add(const FormSubmitRequested());
       await Future<void>.delayed(Duration.zero);
     },
@@ -85,6 +87,26 @@ void main() {
       expect(bloc.state.submitStatus, FormSubmitStatus.success);
       expect(bloc.state.errors['notes'], isNull);
       expect(bloc.state.errors['category'], isNull);
+    },
+  );
+
+  blocTest<FormEngineBloc, FormEngineState>(
+    'changing country clears invalid category selection',
+    build: () => FormEngineBloc(
+      validator: validator,
+      conditionalEngine: conditionalEngine,
+    ),
+    act: (bloc) async {
+      bloc.add(FormSchemaLoaded(combinedSchema));
+      await Future<void>.delayed(Duration.zero);
+      bloc
+        ..add(const FormFieldChanged(key: 'country', value: 'IN'))
+        ..add(const FormFieldChanged(key: 'category', value: 'it'))
+        ..add(const FormFieldChanged(key: 'country', value: 'US'));
+      await Future<void>.delayed(Duration.zero);
+    },
+    verify: (bloc) {
+      expect(bloc.state.values.containsKey('category'), isFalse);
     },
   );
 }

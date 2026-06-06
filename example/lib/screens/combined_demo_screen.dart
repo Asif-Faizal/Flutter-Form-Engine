@@ -3,9 +3,10 @@ import 'package:flutter_form_engine/flutter_form_engine.dart';
 
 import '../widgets/payload_display.dart';
 
-/// Demonstrates conditional show/hide:
-/// The "Category" dropdown only appears when a country is selected.
-/// The "notes" field only appears when category == 'other'.
+/// Demonstrates conditional show/hide and cascading dropdown options:
+/// - Category appears after country is selected.
+/// - Category options change based on the selected country.
+/// - Notes appears when category == 'other'.
 class CombinedDemoScreen extends StatefulWidget {
   const CombinedDemoScreen({super.key});
 
@@ -46,7 +47,8 @@ class _CombinedDemoScreenState extends State<CombinedDemoScreen> {
       {
         'key': 'category',
         'type': 'dropdown',
-        'label': 'Category (appears after country)',
+        'label': 'Category (options depend on country)',
+        'optionsSourceKey': 'country',
         'dependsOn': {
           'field': 'country',
           'condition': 'notEmpty',
@@ -57,9 +59,13 @@ class _CombinedDemoScreenState extends State<CombinedDemoScreen> {
           {'rule': 'required', 'message': 'Select a category'},
         ],
         'options': [
-          {'label': 'Technology', 'value': 'tech'},
-          {'label': 'Design', 'value': 'design'},
-          {'label': 'Other', 'value': 'other'},
+          {'label': 'IT Services', 'value': 'it_services', 'when': 'IN'},
+          {'label': 'Manufacturing', 'value': 'manufacturing', 'when': 'IN'},
+          {'label': 'Agriculture', 'value': 'agriculture', 'when': 'IN'},
+          {'label': 'Software', 'value': 'software', 'when': 'US'},
+          {'label': 'Healthcare', 'value': 'healthcare', 'when': 'US'},
+          {'label': 'Finance', 'value': 'finance', 'when': 'US'},
+          {'label': 'Other', 'value': 'other', 'when': 'OTHER'},
         ],
       },
       {

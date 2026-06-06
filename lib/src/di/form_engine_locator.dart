@@ -7,6 +7,7 @@ import '../registry/widget_registry.dart';
 import '../validation/built_in_validator.dart';
 import '../validation/field_validator.dart';
 import '../validation/validation_rule_registry.dart';
+import '../options/dependent_options_resolver.dart';
 import '../theme/form_engine_theme.dart';
 import '../widgets/fields/dropdown_field_widget.dart';
 import '../widgets/fields/text_field_widget.dart';
@@ -46,6 +47,10 @@ abstract final class FormEngineLocator {
 
     _locator.registerSingleton<ConditionalEngine>(
       ConditionalEngine(evaluatorRegistry: evaluatorRegistry),
+    );
+
+    _locator.registerSingleton<DependentOptionsResolver>(
+      const DependentOptionsResolver(),
     );
 
     _locator.registerSingleton<FieldValidator>(
@@ -126,4 +131,7 @@ abstract final class FormEngineLocator {
       _locator<ConditionEvaluatorRegistry>();
 
   static FormEngineTheme get theme => _locator<FormEngineTheme>();
+
+  static DependentOptionsResolver get dependentOptionsResolver =>
+      _locator<DependentOptionsResolver>();
 }

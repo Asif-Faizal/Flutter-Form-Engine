@@ -6,7 +6,6 @@ import '../bloc/form_event.dart';
 import '../bloc/form_state.dart';
 import '../di/form_engine_locator.dart';
 import '../theme/form_engine_theme_applicator.dart';
-import '../models/field_option.dart';
 import '../models/field_schema.dart';
 import '../models/form_schema.dart';
 import '../registry/widget_registry.dart';
@@ -39,6 +38,7 @@ class FormEngineWidget extends StatelessWidget {
       create: (_) => FormEngineBloc(
         validator: FormEngineLocator.validator,
         conditionalEngine: FormEngineLocator.conditionalEngine,
+        dependentOptionsResolver: FormEngineLocator.dependentOptionsResolver,
         onSubmit: onSubmit,
       )..add(FormSchemaLoaded(schema)),
       child: Theme(
@@ -140,23 +140,30 @@ class _FormEngineBody extends StatelessWidget {
     FormEngineState state,
     WidgetRegistry registry,
   ) {
-    final resolvedOptions = [
-      ...(state.dynamicOptions[field.key] ?? <FieldOption>[]),
-      if ((state.dynamicOptions[field.key] ?? []).isEmpty) ...field.options,
-    ];
+    final remoteOptions = state.dynamicOptions[field.key];
+    final resolvedOptions = FormEngineLocator.dependentOptionsResolver.resolve(
+      field: field,
+      values: state.values,
+      remoteOptions: remoteOptions,
+    );
 
-    return registry.build(
-      schema: field,
-      value: state.values[field.key],
-      error: state.errorFor(field.key),
-      enabled: state.enabledMap[field.key] ?? field.enabled,
-      onChanged: (v) => context
-          .read<FormEngineBloc>()
-          .add(FormFieldChanged(key: field.key, value: v)),
-      onFocusLost: () => context
-          .read<FormEngineBloc>()
-          .add(FormFieldFocusLost(field.key)),
-      resolvedOptions: resolvedOptions,
+    return KeyedSubtree(
+      key: ValueKey(
+        '${field.key}_${resolvedOptions.map((o) => o.value).join('|')}',
+      ),
+      child: registry.build(
+        schema: field,
+        value: state.values[field.key],
+        error: state.errorFor(field.key),
+        enabled: state.enabledMap[field.key] ?? field.enabled,
+        onChanged: (v) => context
+            .read<FormEngineBloc>()
+            .add(FormFieldChanged(key: field.key, value: v)),
+        onFocusLost: () => context
+            .read<FormEngineBloc>()
+            .add(FormFieldFocusLost(field.key)),
+        resolvedOptions: resolvedOptions,
+      ),
     );
   }
 }

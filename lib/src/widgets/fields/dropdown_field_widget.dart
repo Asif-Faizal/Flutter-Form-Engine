@@ -19,12 +19,15 @@ class DropdownFieldWidget extends BaseFieldWidget {
     final options =
         resolvedOptions.isNotEmpty ? resolvedOptions : schema.options;
 
+    final optionValues = options.map((option) => option.value).toSet();
+    final selectedValue = optionValues.contains(value) ? value : null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         DropdownButtonFormField<dynamic>(
-          initialValue: value,
+          initialValue: selectedValue,
           isExpanded: true,
           style: Theme.of(context).textTheme.bodyMedium,
           decoration: InputDecoration(

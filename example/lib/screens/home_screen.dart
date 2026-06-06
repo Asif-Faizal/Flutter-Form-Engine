@@ -36,7 +36,7 @@ class HomeScreen extends StatelessWidget {
           ),
           _DemoTile(
             title: 'Combined + conditional',
-            subtitle: 'Text + dropdown with show/hide dependency',
+            subtitle: 'Cascading dropdowns with show/hide dependency',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
