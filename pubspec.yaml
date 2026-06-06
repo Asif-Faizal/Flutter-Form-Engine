@@ -1,0 +1,25 @@
+name: flutter_form_engine
+description: A JSON-driven form builder for Flutter with BLoC, validation, and conditional logic.
+version: 0.0.1
+homepage: https://github.com/yourname/flutter_form_engine
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.5
+  equatable: ^2.0.5
+  http: ^1.2.1
+  get_it: ^7.7.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  bloc_test: ^9.1.7
+
+flutter:
+  library:
