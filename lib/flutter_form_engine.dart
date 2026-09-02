@@ -41,6 +41,7 @@ export 'src/widgets/form_engine_widget.dart';
 export 'src/widgets/fields/base_field_widget.dart';
 export 'src/widgets/fields/text_field_widget.dart';
 export 'src/widgets/fields/dropdown_field_widget.dart';
+export 'src/widgets/fields/radio_field_widget.dart';
 
 // DI
 export 'src/di/form_engine_locator.dart';

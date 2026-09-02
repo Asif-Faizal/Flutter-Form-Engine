@@ -10,6 +10,7 @@ import '../validation/validation_rule_registry.dart';
 import '../options/dependent_options_resolver.dart';
 import '../theme/form_engine_theme.dart';
 import '../widgets/fields/dropdown_field_widget.dart';
+import '../widgets/fields/radio_field_widget.dart';
 import '../widgets/fields/text_field_widget.dart';
 
 /// Call [FormEngineLocator.setup()] once in your app's main() before
@@ -106,6 +107,28 @@ abstract final class FormEngineLocator {
         required resolvedOptions,
       }) =>
           DropdownFieldWidget(
+            schema: schema,
+            value: value,
+            error: error,
+            enabled: enabled,
+            onChanged: onChanged,
+            onFocusLost: onFocusLost,
+            resolvedOptions: resolvedOptions,
+          ),
+    );
+
+    registry.register(
+      FieldType.radio,
+      ({
+        required schema,
+        required value,
+        required error,
+        required enabled,
+        required onChanged,
+        required onFocusLost,
+        required resolvedOptions,
+      }) =>
+          RadioFieldWidget(
             schema: schema,
             value: value,
             error: error,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'combined_demo_screen.dart';
 import 'dropdown_demo_screen.dart';
+import 'radio_demo_screen.dart';
 import 'text_field_demo_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -31,6 +32,16 @@ class HomeScreen extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (_) => const DropdownDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Radio',
+            subtitle: 'Single-select as radio buttons with conditional field',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const RadioDemoScreen(),
               ),
             ),
           ),
