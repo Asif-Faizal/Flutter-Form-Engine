@@ -6,6 +6,7 @@ import 'date_demo_screen.dart';
 import 'dropdown_demo_screen.dart';
 import 'multi_select_demo_screen.dart';
 import 'radio_demo_screen.dart';
+import 'searchable_dropdown_demo_screen.dart';
 import 'text_field_demo_screen.dart';
 import 'time_demo_screen.dart';
 
