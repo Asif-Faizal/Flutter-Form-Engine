@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'checkbox_demo_screen.dart';
 import 'combined_demo_screen.dart';
+import 'custom_demo_screen.dart';
 import 'date_demo_screen.dart';
 import 'dropdown_demo_screen.dart';
 import 'multi_select_demo_screen.dart';
@@ -87,6 +88,26 @@ class HomeScreen extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (_) => const TimeDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Searchable dropdown',
+            subtitle: 'Type-to-filter dropdown with dependent cities',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const SearchableDropdownDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Custom field',
+            subtitle: 'Star rating via custom widget registration',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const CustomDemoScreen(),
               ),
             ),
           ),
