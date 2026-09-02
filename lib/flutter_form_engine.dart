@@ -45,6 +45,7 @@ export 'src/widgets/fields/date_field_widget.dart';
 export 'src/widgets/fields/dropdown_field_widget.dart';
 export 'src/widgets/fields/multi_select_field_widget.dart';
 export 'src/widgets/fields/radio_field_widget.dart';
+export 'src/widgets/fields/time_field_widget.dart';
 
 // DI
 export 'src/di/form_engine_locator.dart';

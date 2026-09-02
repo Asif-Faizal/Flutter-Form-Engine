@@ -7,6 +7,7 @@ import 'dropdown_demo_screen.dart';
 import 'multi_select_demo_screen.dart';
 import 'radio_demo_screen.dart';
 import 'text_field_demo_screen.dart';
+import 'time_demo_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -65,6 +66,26 @@ class HomeScreen extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (_) => const MultiSelectDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Date',
+            subtitle: 'Date picker with minAge validation and date range',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const DateDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Time',
+            subtitle: 'Time picker with 12h and 24h formats',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const TimeDemoScreen(),
               ),
             ),
           ),
