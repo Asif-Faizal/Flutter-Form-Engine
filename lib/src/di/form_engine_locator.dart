@@ -162,6 +162,28 @@ abstract final class FormEngineLocator {
             resolvedOptions: resolvedOptions,
           ),
     );
+
+    registry.register(
+      FieldType.multiSelect,
+      ({
+        required schema,
+        required value,
+        required error,
+        required enabled,
+        required onChanged,
+        required onFocusLost,
+        required resolvedOptions,
+      }) =>
+          MultiSelectFieldWidget(
+            schema: schema,
+            value: value,
+            error: error,
+            enabled: enabled,
+            onChanged: onChanged,
+            onFocusLost: onFocusLost,
+            resolvedOptions: resolvedOptions,
+          ),
+    );
   }
 
   static FieldValidator get validator => _locator<FieldValidator>();

@@ -10,7 +10,13 @@ class PayloadDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pretty = const JsonEncoder.withIndent('  ').convert(payload);
+    final serializable = payload.map(
+      (key, value) => MapEntry(
+        key,
+        value is DateTime ? value.toIso8601String() : value,
+      ),
+    );
+    final pretty = const JsonEncoder.withIndent('  ').convert(serializable);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
