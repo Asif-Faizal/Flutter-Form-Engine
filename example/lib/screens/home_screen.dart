@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'checkbox_demo_screen.dart';
 import 'combined_demo_screen.dart';
 import 'dropdown_demo_screen.dart';
 import 'radio_demo_screen.dart';
@@ -42,6 +43,16 @@ class HomeScreen extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (_) => const RadioDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Checkbox',
+            subtitle: 'Boolean toggle with mustBeTrue validation',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const CheckboxDemoScreen(),
               ),
             ),
           ),
