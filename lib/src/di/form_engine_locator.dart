@@ -9,7 +9,12 @@ import '../validation/field_validator.dart';
 import '../validation/validation_rule_registry.dart';
 import '../options/dependent_options_resolver.dart';
 import '../theme/form_engine_theme.dart';
+import '../widgets/fields/checkbox_field_widget.dart';
+import '../widgets/fields/date_field_widget.dart';
 import '../widgets/fields/dropdown_field_widget.dart';
+import '../widgets/fields/multi_select_field_widget.dart';
+import '../widgets/fields/radio_field_widget.dart';
+import '../widgets/fields/time_field_widget.dart';
 import '../widgets/fields/text_field_widget.dart';
 
 /// Call [FormEngineLocator.setup()] once in your app's main() before
@@ -106,6 +111,116 @@ abstract final class FormEngineLocator {
         required resolvedOptions,
       }) =>
           DropdownFieldWidget(
+            schema: schema,
+            value: value,
+            error: error,
+            enabled: enabled,
+            onChanged: onChanged,
+            onFocusLost: onFocusLost,
+            resolvedOptions: resolvedOptions,
+          ),
+    );
+
+    registry.register(
+      FieldType.radio,
+      ({
+        required schema,
+        required value,
+        required error,
+        required enabled,
+        required onChanged,
+        required onFocusLost,
+        required resolvedOptions,
+      }) =>
+          RadioFieldWidget(
+            schema: schema,
+            value: value,
+            error: error,
+            enabled: enabled,
+            onChanged: onChanged,
+            onFocusLost: onFocusLost,
+            resolvedOptions: resolvedOptions,
+          ),
+    );
+
+    registry.register(
+      FieldType.checkbox,
+      ({
+        required schema,
+        required value,
+        required error,
+        required enabled,
+        required onChanged,
+        required onFocusLost,
+        required resolvedOptions,
+      }) =>
+          CheckboxFieldWidget(
+            schema: schema,
+            value: value,
+            error: error,
+            enabled: enabled,
+            onChanged: onChanged,
+            onFocusLost: onFocusLost,
+            resolvedOptions: resolvedOptions,
+          ),
+    );
+
+    registry.register(
+      FieldType.multiSelect,
+      ({
+        required schema,
+        required value,
+        required error,
+        required enabled,
+        required onChanged,
+        required onFocusLost,
+        required resolvedOptions,
+      }) =>
+          MultiSelectFieldWidget(
+            schema: schema,
+            value: value,
+            error: error,
+            enabled: enabled,
+            onChanged: onChanged,
+            onFocusLost: onFocusLost,
+            resolvedOptions: resolvedOptions,
+          ),
+    );
+
+    registry.register(
+      FieldType.date,
+      ({
+        required schema,
+        required value,
+        required error,
+        required enabled,
+        required onChanged,
+        required onFocusLost,
+        required resolvedOptions,
+      }) =>
+          DateFieldWidget(
+            schema: schema,
+            value: value,
+            error: error,
+            enabled: enabled,
+            onChanged: onChanged,
+            onFocusLost: onFocusLost,
+            resolvedOptions: resolvedOptions,
+          ),
+    );
+
+    registry.register(
+      FieldType.time,
+      ({
+        required schema,
+        required value,
+        required error,
+        required enabled,
+        required onChanged,
+        required onFocusLost,
+        required resolvedOptions,
+      }) =>
+          TimeFieldWidget(
             schema: schema,
             value: value,
             error: error,

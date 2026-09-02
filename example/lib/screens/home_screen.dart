@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'checkbox_demo_screen.dart';
 import 'combined_demo_screen.dart';
+import 'custom_demo_screen.dart';
+import 'date_demo_screen.dart';
 import 'dropdown_demo_screen.dart';
+import 'multi_select_demo_screen.dart';
+import 'radio_demo_screen.dart';
+import 'searchable_dropdown_demo_screen.dart';
 import 'text_field_demo_screen.dart';
+import 'time_demo_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -31,6 +38,76 @@ class HomeScreen extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (_) => const DropdownDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Radio',
+            subtitle: 'Single-select as radio buttons with conditional field',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const RadioDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Checkbox',
+            subtitle: 'Boolean toggle with mustBeTrue validation',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const CheckboxDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Multi-select',
+            subtitle: 'Multiple checkboxes with min/max selection rules',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const MultiSelectDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Date',
+            subtitle: 'Date picker with minAge validation and date range',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const DateDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Time',
+            subtitle: 'Time picker with 12h and 24h formats',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const TimeDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Searchable dropdown',
+            subtitle: 'Type-to-filter dropdown with dependent cities',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const SearchableDropdownDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Custom field',
+            subtitle: 'Star rating via custom widget registration',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const CustomDemoScreen(),
               ),
             ),
           ),

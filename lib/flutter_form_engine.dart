@@ -40,7 +40,12 @@ export 'src/registry/widget_registry.dart';
 export 'src/widgets/form_engine_widget.dart';
 export 'src/widgets/fields/base_field_widget.dart';
 export 'src/widgets/fields/text_field_widget.dart';
+export 'src/widgets/fields/checkbox_field_widget.dart';
+export 'src/widgets/fields/date_field_widget.dart';
 export 'src/widgets/fields/dropdown_field_widget.dart';
+export 'src/widgets/fields/multi_select_field_widget.dart';
+export 'src/widgets/fields/radio_field_widget.dart';
+export 'src/widgets/fields/time_field_widget.dart';
 
 // DI
 export 'src/di/form_engine_locator.dart';

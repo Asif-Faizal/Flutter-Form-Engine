@@ -67,7 +67,7 @@ class FieldSchema extends Equatable {
       required: map['required'] as bool? ?? false,
       enabled: map['enabled'] as bool? ?? true,
       visible: map['visible'] as bool? ?? true,
-      initialValue: map['initialValue'],
+      initialValue: _parseInitialValue(map['initialValue'], map['type'] as String),
       validations: (map['validations'] as List<dynamic>? ?? [])
           .map((e) => ValidationRule.fromMap(e as Map<String, dynamic>))
           .toList(),
@@ -85,6 +85,8 @@ class FieldSchema extends Equatable {
       maxSelect: map['maxSelect'] as int?,
       optionsEndpoint: map['optionsEndpoint'] as String?,
       optionsSourceKey: map['optionsSourceKey'] as String?,
+      minDate: _parseDate(map['minDate']),
+      maxDate: _parseDate(map['maxDate']),
       dateFormat: map['dateFormat'] as String?,
       use24Hour: map['use24Hour'] as bool? ?? false,
       extra: (map['extra'] as Map<String, dynamic>?) ?? const {},
@@ -102,6 +104,21 @@ class FieldSchema extends Equatable {
       'visiblePassword' => TextInputType.visiblePassword,
       _ => null,
     };
+  }
+
+  static DateTime? _parseDate(dynamic raw) {
+    if (raw == null) return null;
+    if (raw is DateTime) return raw;
+    if (raw is String) return DateTime.tryParse(raw);
+    return null;
+  }
+
+  static dynamic _parseInitialValue(dynamic raw, String type) {
+    if (raw == null) return null;
+    if (type == 'date' || type == 'time') {
+      if (raw is String) return DateTime.tryParse(raw);
+    }
+    return raw;
   }
 
   @override
