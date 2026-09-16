@@ -14,6 +14,7 @@ import '../widgets/fields/date_field_widget.dart';
 import '../widgets/fields/dropdown_field_widget.dart';
 import '../widgets/fields/multi_select_field_widget.dart';
 import '../widgets/fields/radio_field_widget.dart';
+import '../widgets/fields/searchable_dropdown_field_widget.dart';
 import '../widgets/fields/time_field_widget.dart';
 import '../widgets/fields/text_field_widget.dart';
 
@@ -111,6 +112,28 @@ abstract final class FormEngineLocator {
         required resolvedOptions,
       }) =>
           DropdownFieldWidget(
+            schema: schema,
+            value: value,
+            error: error,
+            enabled: enabled,
+            onChanged: onChanged,
+            onFocusLost: onFocusLost,
+            resolvedOptions: resolvedOptions,
+          ),
+    );
+
+    registry.register(
+      FieldType.searchableDropdown,
+      ({
+        required schema,
+        required value,
+        required error,
+        required enabled,
+        required onChanged,
+        required onFocusLost,
+        required resolvedOptions,
+      }) =>
+          SearchableDropdownFieldWidget(
             schema: schema,
             value: value,
             error: error,

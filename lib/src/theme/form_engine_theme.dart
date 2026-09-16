@@ -25,6 +25,7 @@ class FormEngineTheme extends Equatable {
     this.fontSizeBody = 14,
     this.fontSizeLabel = 12,
     this.fontSizeHint = 12,
+    this.overlayScrimColor = const Color(0x66000000),
   });
 
   final Color primaryColor;
@@ -45,6 +46,7 @@ class FormEngineTheme extends Equatable {
   final double fontSizeBody;
   final double fontSizeLabel;
   final double fontSizeHint;
+  final Color overlayScrimColor;
 
   /// IBM Carbon Design System defaults (light mode).
   factory FormEngineTheme.carbon({String? fontFamily}) {
@@ -84,6 +86,7 @@ class FormEngineTheme extends Equatable {
     double? fontSizeBody,
     double? fontSizeLabel,
     double? fontSizeHint,
+    Color? overlayScrimColor,
   }) {
     return FormEngineTheme(
       primaryColor: primaryColor ?? this.primaryColor,
@@ -104,6 +107,7 @@ class FormEngineTheme extends Equatable {
       fontSizeBody: fontSizeBody ?? this.fontSizeBody,
       fontSizeLabel: fontSizeLabel ?? this.fontSizeLabel,
       fontSizeHint: fontSizeHint ?? this.fontSizeHint,
+      overlayScrimColor: overlayScrimColor ?? this.overlayScrimColor,
     );
   }
 

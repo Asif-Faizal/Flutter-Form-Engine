@@ -22,7 +22,6 @@ class _DropdownDemoScreenState extends State<DropdownDemoScreen> {
         'key': 'country',
         'type': 'dropdown',
         'label': 'Country',
-        'hint': 'Select a country',
         'validations': [
           {'rule': 'required', 'message': 'Please select a country'},
         ],

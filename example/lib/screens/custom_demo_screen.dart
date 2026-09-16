@@ -59,10 +59,11 @@ class _CustomDemoScreenState extends State<CustomDemoScreen> {
   }
 }
 
-/// Registers example custom widgets. Call from `main()` before `runApp`.
-void registerExampleCustomWidgets() {
+/// Sets up the form engine with the example's custom widgets.
+/// Call once from `main()` before `runApp`.
+void registerExampleCustomWidgets({required FormEngineTheme theme}) {
   FormEngineLocator.setup(
-    theme: FormEngineLocator.theme,
+    theme: theme,
     customWidgets: [
       MapEntry(
         FieldType.custom,
@@ -94,6 +95,5 @@ void registerExampleCustomWidgets() {
         },
       ),
     ],
-    reset: true,
   );
 }

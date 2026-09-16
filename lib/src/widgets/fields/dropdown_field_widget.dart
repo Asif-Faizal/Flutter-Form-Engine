@@ -1,58 +1,125 @@
 import 'package:flutter/material.dart';
 
-import 'base_field_widget.dart';
+import '../../di/form_engine_locator.dart';
+import '../../models/field_option.dart';
+import '../../models/field_schema.dart';
+import 'form_engine_dropdown_overlay.dart';
 
-class DropdownFieldWidget extends BaseFieldWidget {
+class DropdownFieldWidget extends StatefulWidget {
   const DropdownFieldWidget({
     super.key,
-    required super.schema,
-    required super.value,
-    required super.error,
-    required super.enabled,
-    required super.onChanged,
-    required super.onFocusLost,
-    required super.resolvedOptions,
+    required this.schema,
+    required this.value,
+    required this.error,
+    required this.enabled,
+    required this.onChanged,
+    required this.onFocusLost,
+    required this.resolvedOptions,
   });
+
+  final FieldSchema schema;
+  final dynamic value;
+  final String? error;
+  final bool enabled;
+  final ValueChanged<dynamic> onChanged;
+  final VoidCallback onFocusLost;
+  final List<FieldOption> resolvedOptions;
+
+  @override
+  State<DropdownFieldWidget> createState() => _DropdownFieldWidgetState();
+}
+
+class _DropdownFieldWidgetState extends State<DropdownFieldWidget> {
+  final _anchorKey = GlobalKey();
+  var _isOpen = false;
+
+  List<FieldOption> get _options =>
+      widget.resolvedOptions.isNotEmpty
+          ? widget.resolvedOptions
+          : widget.schema.options;
+
+  dynamic get _selectedValue {
+    final optionValues = _options.map((option) => option.value).toSet();
+    return optionValues.contains(widget.value) ? widget.value : null;
+  }
+
+  String? get _displayLabel {
+    if (_selectedValue == null) return null;
+    for (final option in _options) {
+      if (option.value == _selectedValue) return option.label;
+    }
+    return null;
+  }
+
+  InputDecoration _decoration(BuildContext context) {
+    final base = InputDecoration(
+      labelText: widget.schema.label,
+      hintText: widget.schema.hint,
+      errorText: widget.error,
+    ).applyDefaults(Theme.of(context).inputDecorationTheme);
+
+    return base;
+  }
+
+  Future<void> _openMenu() async {
+    if (!widget.enabled || _options.isEmpty) return;
+
+    setState(() => _isOpen = true);
+
+    await FormEngineDropdownOverlay.show(
+      anchorKey: _anchorKey,
+      options: _options,
+      selectedValue: _selectedValue,
+      onSelected: (selected) {
+        widget.onChanged(selected);
+        widget.onFocusLost();
+      },
+      onDismissed: () {
+        if (mounted) setState(() => _isOpen = false);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final options =
-        resolvedOptions.isNotEmpty ? resolvedOptions : schema.options;
-
-    final optionValues = options.map((option) => option.value).toSet();
-    final selectedValue = optionValues.contains(value) ? value : null;
+    final theme = FormEngineLocator.theme;
+    final displayLabel = _displayLabel;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        DropdownButtonFormField<dynamic>(
-          initialValue: selectedValue,
-          isExpanded: true,
-          style: Theme.of(context).textTheme.bodyMedium,
-          decoration: InputDecoration(
-            labelText: schema.label,
-            hintText: schema.hint,
-            errorText: error,
-          ).applyDefaults(Theme.of(context).inputDecorationTheme),
-          onTap: () {},
-          items: options
-              .map(
-                (o) => DropdownMenuItem<dynamic>(
-                  value: o.value,
+        InputDecorator(
+          key: _anchorKey,
+          decoration: _decoration(context),
+          isEmpty: displayLabel == null,
+          child: InkWell(
+            onTap: widget.enabled ? _openMenu : null,
+            child: Row(
+              children: [
+                Expanded(
                   child: Text(
-                    o.label,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    displayLabel ?? widget.schema.hint ?? '',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: displayLabel == null
+                              ? theme.hintColor
+                              : theme.onSurfaceColor,
+                        ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              )
-              .toList(),
-          onChanged: enabled
-              ? (selected) {
-                  onChanged(selected);
-                  onFocusLost();
-                }
-              : null,
+                AnimatedRotation(
+                  turns: _isOpen ? 0.5 : 0,
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOutCubic,
+                  child: Icon(
+                    Icons.keyboard_arrow_down,
+                    color: theme.onSurfaceColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );
