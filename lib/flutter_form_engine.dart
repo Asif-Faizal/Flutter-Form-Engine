@@ -8,6 +8,7 @@ export 'src/models/field_type.dart';
 export 'src/models/field_option.dart';
 export 'src/models/validation_rule.dart';
 export 'src/models/conditional_rule.dart';
+export 'src/models/media_file_value.dart';
 
 // Parser
 export 'src/parser/form_schema_parser.dart';
@@ -29,6 +30,10 @@ export 'src/conditional/condition_evaluator_registry.dart';
 // Options
 export 'src/options/dependent_options_resolver.dart';
 
+// Media
+export 'src/media/media_constraints.dart';
+export 'src/media/media_picker.dart';
+
 // Theme
 export 'src/theme/form_engine_theme.dart';
 export 'src/theme/form_engine_theme_applicator.dart';
@@ -43,6 +48,8 @@ export 'src/widgets/fields/text_field_widget.dart';
 export 'src/widgets/fields/checkbox_field_widget.dart';
 export 'src/widgets/fields/date_field_widget.dart';
 export 'src/widgets/fields/dropdown_field_widget.dart';
+export 'src/widgets/fields/image_field_widget.dart';
+export 'src/widgets/fields/media_field_widget.dart';
 export 'src/widgets/fields/multi_select_field_widget.dart';
 export 'src/widgets/fields/radio_field_widget.dart';
 export 'src/widgets/fields/searchable_dropdown_field_widget.dart';

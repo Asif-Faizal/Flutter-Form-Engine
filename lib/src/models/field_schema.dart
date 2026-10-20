@@ -30,6 +30,12 @@ class FieldSchema extends Equatable {
     this.maxDate,
     this.dateFormat,
     this.use24Hour = false,
+    this.allowedExtensions = const [],
+    this.maxFileSize,
+    this.maxFiles,
+    this.allowCamera = true,
+    this.allowGallery = true,
+    this.allowMultiple = false,
     this.extra = const {},
   });
 
@@ -56,6 +62,25 @@ class FieldSchema extends Equatable {
   final DateTime? maxDate;
   final String? dateFormat;
   final bool use24Hour;
+
+  /// Allowed file extensions without dots (e.g. `['pdf', 'docx']`).
+  final List<String> allowedExtensions;
+
+  /// Maximum file size in bytes.
+  final int? maxFileSize;
+
+  /// Maximum number of files (media / multi-image).
+  final int? maxFiles;
+
+  /// Whether the image field may open the camera.
+  final bool allowCamera;
+
+  /// Whether the image field may open the gallery.
+  final bool allowGallery;
+
+  /// Whether multiple files may be selected.
+  final bool allowMultiple;
+
   final Map<String, dynamic> extra;
 
   factory FieldSchema.fromMap(Map<String, dynamic> map) {
@@ -89,6 +114,12 @@ class FieldSchema extends Equatable {
       maxDate: _parseDate(map['maxDate']),
       dateFormat: map['dateFormat'] as String?,
       use24Hour: map['use24Hour'] as bool? ?? false,
+      allowedExtensions: _parseExtensions(map['allowedExtensions']),
+      maxFileSize: map['maxFileSize'] as int?,
+      maxFiles: map['maxFiles'] as int?,
+      allowCamera: map['allowCamera'] as bool? ?? true,
+      allowGallery: map['allowGallery'] as bool? ?? true,
+      allowMultiple: map['allowMultiple'] as bool? ?? false,
       extra: (map['extra'] as Map<String, dynamic>?) ?? const {},
     );
   }
@@ -119,6 +150,24 @@ class FieldSchema extends Equatable {
       if (raw is String) return DateTime.tryParse(raw);
     }
     return raw;
+  }
+
+  static List<String> _parseExtensions(dynamic raw) {
+    if (raw == null) return const [];
+    if (raw is List) {
+      return raw
+          .map((e) => e.toString().trim().toLowerCase().replaceFirst(RegExp(r'^\.'), ''))
+          .where((e) => e.isNotEmpty)
+          .toList();
+    }
+    if (raw is String && raw.trim().isNotEmpty) {
+      return raw
+          .split(RegExp(r'[,|\s]+'))
+          .map((e) => e.trim().toLowerCase().replaceFirst(RegExp(r'^\.'), ''))
+          .where((e) => e.isNotEmpty)
+          .toList();
+    }
+    return const [];
   }
 
   @override

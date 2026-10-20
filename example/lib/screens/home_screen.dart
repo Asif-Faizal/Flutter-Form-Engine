@@ -5,6 +5,8 @@ import 'combined_demo_screen.dart';
 import 'custom_demo_screen.dart';
 import 'date_demo_screen.dart';
 import 'dropdown_demo_screen.dart';
+import 'image_demo_screen.dart';
+import 'media_demo_screen.dart';
 import 'multi_select_demo_screen.dart';
 import 'radio_demo_screen.dart';
 import 'searchable_dropdown_demo_screen.dart';
@@ -108,6 +110,26 @@ class HomeScreen extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (_) => const CustomDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Image',
+            subtitle: 'Camera / gallery capture with image type limits',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const ImageDemoScreen(),
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Media',
+            subtitle: 'File upload restricted to allowed extensions',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const MediaDemoScreen(),
               ),
             ),
           ),

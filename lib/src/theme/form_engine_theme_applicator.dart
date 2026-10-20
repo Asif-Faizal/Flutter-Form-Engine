@@ -137,7 +137,7 @@ abstract final class FormEngineThemeApplicator {
         ),
         shape: RoundedRectangleBorder(borderRadius: theme.borderRadius),
       ),
-      cardTheme: CardThemeData(
+      cardTheme: CardTheme(
         color: theme.surfaceColor,
         elevation: 0,
         shape: RoundedRectangleBorder(

@@ -1,4 +1,6 @@
+import '../media/media_constraints.dart';
 import '../models/field_schema.dart';
+import '../models/field_type.dart';
 import '../models/validation_rule.dart';
 import 'field_validator.dart';
 import 'validation_rule_registry.dart';
@@ -26,6 +28,11 @@ class BuiltInValidator implements FieldValidator {
       final error = _applyRule(rule, value, allValues);
       if (error != null) return error;
     }
+
+    // Schema-level media constraints (extensions / size / count).
+    final mediaError = _validateMediaConstraints(schema, value);
+    if (mediaError != null) return mediaError;
+
     return null;
   }
 
@@ -35,6 +42,22 @@ class BuiltInValidator implements FieldValidator {
     Map<String, dynamic> allValues,
   ) {
     return _registry.apply(rule, value, allValues);
+  }
+
+  String? _validateMediaConstraints(FieldSchema schema, dynamic value) {
+    if (schema.type != FieldType.image && schema.type != FieldType.media) {
+      return null;
+    }
+
+    final allowed = schema.type == FieldType.image
+        ? MediaConstraints.effectiveImageExtensions(schema)
+        : MediaConstraints.allowedExtensionsFor(schema);
+
+    return MediaConstraints.validateFiles(
+      schema: schema,
+      value: value,
+      allowedExtensions: allowed,
+    );
   }
 }
 

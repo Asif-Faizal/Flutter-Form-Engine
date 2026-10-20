@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_form_engine/flutter_form_engine.dart';
 
 /// Shows the submitted payload at the bottom of the screen.
 class PayloadDisplay extends StatelessWidget {
@@ -8,13 +9,17 @@ class PayloadDisplay extends StatelessWidget {
 
   final Map<String, dynamic> payload;
 
+  dynamic _serialize(dynamic value) {
+    if (value is DateTime) return value.toIso8601String();
+    if (value is MediaFileValue) return value.toMap();
+    if (value is List) return value.map(_serialize).toList();
+    return value;
+  }
+
   @override
   Widget build(BuildContext context) {
     final serializable = payload.map(
-      (key, value) => MapEntry(
-        key,
-        value is DateTime ? value.toIso8601String() : value,
-      ),
+      (key, value) => MapEntry(key, _serialize(value)),
     );
     final pretty = const JsonEncoder.withIndent('  ').convert(serializable);
     return Container(

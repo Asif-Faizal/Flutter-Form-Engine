@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 
 import '../conditional/condition_evaluator_registry.dart';
 import '../conditional/conditional_engine.dart';
+import '../media/media_picker.dart';
 import '../models/field_type.dart';
 import '../registry/widget_registry.dart';
 import '../validation/built_in_validator.dart';
@@ -12,6 +13,8 @@ import '../theme/form_engine_theme.dart';
 import '../widgets/fields/checkbox_field_widget.dart';
 import '../widgets/fields/date_field_widget.dart';
 import '../widgets/fields/dropdown_field_widget.dart';
+import '../widgets/fields/image_field_widget.dart';
+import '../widgets/fields/media_field_widget.dart';
 import '../widgets/fields/multi_select_field_widget.dart';
 import '../widgets/fields/radio_field_widget.dart';
 import '../widgets/fields/searchable_dropdown_field_widget.dart';
@@ -36,37 +39,55 @@ abstract final class FormEngineLocator {
     ValidationRuleRegistry? validationRules,
     ConditionEvaluatorRegistry? conditionEvaluators,
     List<MapEntry<FieldType, FieldWidgetBuilder>>? customWidgets,
+    MediaPicker? mediaPicker,
     bool reset = false,
   }) {
-    if (reset) _locator.reset();
+    // Prefer synchronous reassignment over GetIt.reset() (async) so tests and
+    // hot-restart callers can safely re-run setup without racing registrations.
+    if (reset) {
+      _locator.allowReassignment = true;
+    }
 
-    _locator.registerSingleton<FormEngineTheme>(
-      theme ?? FormEngineTheme.carbon(),
-    );
+    _registerSingleton<FormEngineTheme>(theme ?? FormEngineTheme.carbon());
 
     final ruleRegistry = validationRules ?? ValidationRuleRegistry.withBuiltIns();
     final evaluatorRegistry =
         conditionEvaluators ?? ConditionEvaluatorRegistry.withBuiltIns();
 
-    _locator.registerSingleton<ValidationRuleRegistry>(ruleRegistry);
-    _locator.registerSingleton<ConditionEvaluatorRegistry>(evaluatorRegistry);
+    _registerSingleton<ValidationRuleRegistry>(ruleRegistry);
+    _registerSingleton<ConditionEvaluatorRegistry>(evaluatorRegistry);
 
-    _locator.registerSingleton<ConditionalEngine>(
+    _registerSingleton<ConditionalEngine>(
       ConditionalEngine(evaluatorRegistry: evaluatorRegistry),
     );
 
-    _locator.registerSingleton<DependentOptionsResolver>(
+    _registerSingleton<DependentOptionsResolver>(
       const DependentOptionsResolver(),
     );
 
-    _locator.registerSingleton<FieldValidator>(
+    _registerSingleton<FieldValidator>(
       customValidator ?? BuiltInValidator(ruleRegistry: ruleRegistry),
+    );
+
+    _registerSingleton<MediaPicker>(
+      mediaPicker ?? const StubMediaPicker(),
     );
 
     final registry = WidgetRegistry();
     _registerBuiltIns(registry);
     customWidgets?.forEach((e) => registry.register(e.key, e.value));
-    _locator.registerSingleton<WidgetRegistry>(registry);
+    _registerSingleton<WidgetRegistry>(registry);
+
+    if (reset) {
+      _locator.allowReassignment = false;
+    }
+  }
+
+  static void _registerSingleton<T extends Object>(T instance) {
+    if (_locator.isRegistered<T>()) {
+      _locator.unregister<T>();
+    }
+    _locator.registerSingleton<T>(instance);
   }
 
   static void _registerBuiltIns(WidgetRegistry registry) {
@@ -253,6 +274,72 @@ abstract final class FormEngineLocator {
             resolvedOptions: resolvedOptions,
           ),
     );
+
+    registry.register(
+      FieldType.searchableDropdown,
+      ({
+        required schema,
+        required value,
+        required error,
+        required enabled,
+        required onChanged,
+        required onFocusLost,
+        required resolvedOptions,
+      }) =>
+          SearchableDropdownFieldWidget(
+            schema: schema,
+            value: value,
+            error: error,
+            enabled: enabled,
+            onChanged: onChanged,
+            onFocusLost: onFocusLost,
+            resolvedOptions: resolvedOptions,
+          ),
+    );
+
+    registry.register(
+      FieldType.image,
+      ({
+        required schema,
+        required value,
+        required error,
+        required enabled,
+        required onChanged,
+        required onFocusLost,
+        required resolvedOptions,
+      }) =>
+          ImageFieldWidget(
+            schema: schema,
+            value: value,
+            error: error,
+            enabled: enabled,
+            onChanged: onChanged,
+            onFocusLost: onFocusLost,
+            resolvedOptions: resolvedOptions,
+          ),
+    );
+
+    registry.register(
+      FieldType.media,
+      ({
+        required schema,
+        required value,
+        required error,
+        required enabled,
+        required onChanged,
+        required onFocusLost,
+        required resolvedOptions,
+      }) =>
+          MediaFieldWidget(
+            schema: schema,
+            value: value,
+            error: error,
+            enabled: enabled,
+            onChanged: onChanged,
+            onFocusLost: onFocusLost,
+            resolvedOptions: resolvedOptions,
+          ),
+    );
   }
 
   static FieldValidator get validator => _locator<FieldValidator>();
@@ -272,4 +359,6 @@ abstract final class FormEngineLocator {
 
   static DependentOptionsResolver get dependentOptionsResolver =>
       _locator<DependentOptionsResolver>();
+
+  static MediaPicker get mediaPicker => _locator<MediaPicker>();
 }

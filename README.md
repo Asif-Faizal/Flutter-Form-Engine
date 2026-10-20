@@ -18,6 +18,8 @@ See [docs/fields/README.md](docs/fields/README.md) for the full field reference:
 | `date` | Date picker |
 | `time` | Time picker |
 | `searchableDropdown` | Type-to-filter dropdown |
+| `image` | Camera / gallery image capture |
+| `media` | File upload with allowed extensions |
 | `custom` | Register your own widget |
 
 ## Getting started
