@@ -8,15 +8,10 @@ import 'theme/app_theme.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
-<<<<<<< HEAD
-  registerExampleCustomWidgets(theme: AppTheme.formEngineTheme);
-=======
-  FormEngineLocator.setup(
+  registerExampleCustomWidgets(
     theme: AppTheme.formEngineTheme,
     mediaPicker: DemoMediaPicker(navigatorKey),
   );
-  registerExampleCustomWidgets();
->>>>>>> e327aa8 (feat: add image field with camera/gallery capture and media foundation)
   runApp(const ExampleApp());
 }
 
