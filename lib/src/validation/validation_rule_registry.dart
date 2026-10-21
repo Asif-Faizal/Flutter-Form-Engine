@@ -1,3 +1,5 @@
+import '../media/media_constraints.dart';
+import '../models/media_file_value.dart';
 import '../models/validation_rule.dart';
 
 /// Signature for a single validation rule handler.
@@ -61,6 +63,9 @@ abstract final class BuiltInValidationRules {
     registry.register('minSelect', _minSelect);
     registry.register('maxSelect', _maxSelect);
     registry.register('matchField', _matchField);
+    registry.register('allowedExtensions', _allowedExtensions);
+    registry.register('maxFileSize', _maxFileSize);
+    registry.register('maxFiles', _maxFiles);
   }
 
   static String? _required(
@@ -71,6 +76,9 @@ abstract final class BuiltInValidationRules {
     if (value == null) return rule.message;
     if (value is String && value.trim().isEmpty) return rule.message;
     if (value is List && value.isEmpty) return rule.message;
+    if (value is MediaFileValue && value.path.trim().isEmpty) {
+      return rule.message;
+    }
     return null;
   }
 
@@ -171,5 +179,68 @@ abstract final class BuiltInValidationRules {
     Map<String, dynamic> allValues,
   ) {
     return value == allValues[rule.stringValue] ? null : rule.message;
+  }
+
+  static List<String> _extensionsFromRule(ValidationRule rule) {
+    final raw = rule.value;
+    if (raw is List) {
+      return raw
+          .map((e) => MediaConstraints.normalizeExtension(e.toString()))
+          .where((e) => e.isNotEmpty)
+          .toList();
+    }
+    if (raw is String && raw.trim().isNotEmpty) {
+      return raw
+          .split(RegExp(r'[,|\s]+'))
+          .map(MediaConstraints.normalizeExtension)
+          .where((e) => e.isNotEmpty)
+          .toList();
+    }
+    return const [];
+  }
+
+  static String? _allowedExtensions(
+    ValidationRule rule,
+    dynamic value,
+    Map<String, dynamic> allValues,
+  ) {
+    final allowed = _extensionsFromRule(rule);
+    if (allowed.isEmpty) return null;
+
+    final files = MediaConstraints.asFileList(value);
+    for (final file in files) {
+      if (!MediaConstraints.isExtensionAllowed(file.extension, allowed)) {
+        return rule.message;
+      }
+    }
+    return null;
+  }
+
+  static String? _maxFileSize(
+    ValidationRule rule,
+    dynamic value,
+    Map<String, dynamic> allValues,
+  ) {
+    final max = rule.intValue;
+    if (max == null) return null;
+
+    final files = MediaConstraints.asFileList(value);
+    for (final file in files) {
+      if (file.sizeBytes != null && file.sizeBytes! > max) {
+        return rule.message;
+      }
+    }
+    return null;
+  }
+
+  static String? _maxFiles(
+    ValidationRule rule,
+    dynamic value,
+    Map<String, dynamic> allValues,
+  ) {
+    final max = rule.intValue;
+    if (max == null) return null;
+    final files = MediaConstraints.asFileList(value);
+    return files.length > max ? rule.message : null;
   }
 }

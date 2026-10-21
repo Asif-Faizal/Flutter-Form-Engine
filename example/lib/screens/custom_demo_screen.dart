@@ -59,11 +59,15 @@ class _CustomDemoScreenState extends State<CustomDemoScreen> {
   }
 }
 
-/// Sets up the form engine with the example's custom widgets.
+/// Sets up the form engine with the example's custom widgets and media picker.
 /// Call once from `main()` before `runApp`.
-void registerExampleCustomWidgets({required FormEngineTheme theme}) {
+void registerExampleCustomWidgets({
+  required FormEngineTheme theme,
+  MediaPicker? mediaPicker,
+}) {
   FormEngineLocator.setup(
     theme: theme,
+    mediaPicker: mediaPicker,
     customWidgets: [
       MapEntry(
         FieldType.custom,

@@ -268,12 +268,12 @@ class _DropdownMenuPanel extends StatelessWidget {
           border: Border.all(color: theme.borderColor),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.14),
+              color: Colors.black.withOpacity(0.14),
               blurRadius: 16,
               offset: const Offset(0, 8),
             ),
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: Colors.black.withOpacity(0.08),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -298,7 +298,7 @@ class _DropdownMenuPanel extends StatelessWidget {
                     vertical: 14,
                   ),
                   color: isSelected
-                      ? theme.primaryColor.withValues(alpha: 0.08)
+                      ? theme.primaryColor.withOpacity(0.08)
                       : null,
                   child: Row(
                     children: [

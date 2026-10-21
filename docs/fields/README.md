@@ -18,6 +18,8 @@ JSON-driven field types supported by **flutter_form_engine**.
 | `date` | [date.md](date.md) | Date picker |
 | `time` | [time.md](time.md) | Time picker |
 | `searchableDropdown` | [searchable_dropdown.md](searchable_dropdown.md) | Filterable dropdown |
+| `image` | [image.md](image.md) | Camera / gallery image capture |
+| `media` | [media.md](media.md) | File upload with allowed extensions |
 | `custom` | [custom.md](custom.md) | Bring-your-own widget |
 
 ## Quick start
@@ -60,6 +62,12 @@ Option-based fields (`dropdown`, `radio`, `multiSelect`, `searchableDropdown`) a
 
 - `options`, `optionsSourceKey`, `optionsEndpoint`
 - `extra.optionsBySource` for grouped dependent options
+
+Media fields (`image`, `media`) also support:
+
+- `allowedExtensions`, `maxFileSize`, `maxFiles`
+- `allowCamera`, `allowGallery`, `allowMultiple`
+- Injectable `MediaPicker` via `FormEngineLocator.setup(mediaPicker: ...)`
 
 ## Example app
 

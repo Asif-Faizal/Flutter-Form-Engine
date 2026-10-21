@@ -11,6 +11,8 @@ enum FieldType {
   checkbox,
   date,
   time,
+  image,
+  media,
   custom;
 
   static FieldType fromString(String value) {

@@ -1,4 +1,5 @@
 import '../models/conditional_rule.dart';
+import '../models/media_file_value.dart';
 
 /// Signature for a single condition evaluator.
 typedef ConditionHandler = bool Function(
@@ -64,14 +65,20 @@ abstract final class BuiltInConditions {
     return _fieldValue(rule, values) != rule.value;
   }
 
+  static bool _isValueEmpty(dynamic fieldValue) {
+    if (fieldValue == null) return true;
+    if (fieldValue is String) return fieldValue.trim().isEmpty;
+    if (fieldValue is List) return fieldValue.isEmpty;
+    if (fieldValue is MediaFileValue) return fieldValue.path.trim().isEmpty;
+    return fieldValue.toString().isEmpty;
+  }
+
   static bool _notEmpty(ConditionalRule rule, Map<String, dynamic> values) {
-    final fieldValue = _fieldValue(rule, values);
-    return fieldValue != null && fieldValue.toString().isNotEmpty;
+    return !_isValueEmpty(_fieldValue(rule, values));
   }
 
   static bool _isEmpty(ConditionalRule rule, Map<String, dynamic> values) {
-    final fieldValue = _fieldValue(rule, values);
-    return fieldValue == null || fieldValue.toString().isEmpty;
+    return _isValueEmpty(_fieldValue(rule, values));
   }
 
   static bool _contains(ConditionalRule rule, Map<String, dynamic> values) {
